@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}@{{username}} on Social Media App{% endblock %}
+{% block body %}
+    <br>
+	<h3 style="margin-left: 5%;">@{{username}} on Social Media App</h3>
+    <p style='margin-left: 5%;'>
+        Username: {{username}}<br>
+		Email: {{email}}<br>
+		First name: {{first}}<br>
+		Last name: {{last}}<br>
+		<a href="mailto:{{email}}" class="a">Send an email to @{{username}}.</a>
+	</p>
+	{% if not friend %}<a href="/add-friend-{{_id}}" class="a" style="margin-left: 5%;">Add as a friend['</']a><br>{% endif %}
+	{% if follower %}
+		<a href="/unfollow-{{_id}}" class="d" style="margin-left: 5%;">Unfollow.</a><br>
+	{% else %}
+		<a href="/add-follower-{{user['_id']}}:{{_id}}" class="a" style="margin-left: 5%;">Follow.</a><br>
+	{% endif %}
+	{% if friends %}
+		<hr>
+		<span style="margin-left: 5%;">@{{username}}'s friends:</span>
+		<div style="margin-left: 7%;">
+			{% for friend in friends %}
+				<a href="/{{friend['_id']}}" class="link">@{{friend['username']}}</a>. {% if _id != user['_id'] %}{% if friend['_id'] != user['_id'] %}<a href="/add-friend-{{friend['_id']}}" class="a">Add as a friend['</']a> <a href="/add-follower-{{user['_id']}}:{{friend['_id']}}">Follow.</a> {% endif %}{% endif %}<br>
+			{% endfor %}
+		</div>
+	{% endif %}<br>
+	{% if followers %}
+		<hr>
+		<span style="margin-left: 5%;">@{{username}}'s followers ({{followers_num}}):</span>
+		<div style="margin-left: 7%;">
+			{% for follower in followers %}
+				<a href="/{{follower['_id']}}" class="link">@{{follower['username']}}</a>. {% if _id != user['_id'] %}{% if follower['_id'] != user['_id'] %}<a href="/add-follower-{{user['_id']}}:{{follower['_id']}}" class="a">Follow.</a>{% endif %}{% endif %}<br>
+			{% endfor %}
+		</div>
+	{% endif %}
+	{% if following %}
+		<hr>
+		<span style="margin-left: 5%;">@{{username}} is following ({{following_num}}):</span>
+		<div style="margin-left: 7%;">
+			{% for follower in following %}
+				<a href="/{{follower['_id']}}" class="link">@{{follower['username']}}</a>. {% if _id != user['_id'] %}{% if follower['_id'] != user['_id'] %}<a href="/add-follower-{{user['_id']}}:{{follower['_id']}}" class="a">Follow.</a>{% endif %}{% endif %}<br>
+			{% endfor %}
+		</div>
+	{% endif %}
+	{% if groups %}
+		<span style="margin-left: 5%;">Groups @{{username}}'s in:</span>
+		<div style="margin-left: 7%;">
+			{% for group in groups %}
+				<a href="/{{group['_id']}}-group" class="link">{{group['name']}}</a><br>
+			{% endfor %}
+		</div>
+	{% endif %}
+	<hr>
+	<p style="margin-left: 5%;">
+		{% if not posts %}
+			<center style="color: #d3d3d3;"><h2>This user has no posts yet...</h2></center>
+        {% else %}
+            Number of posts: {{number}}<br><br>
+			{% for post in posts %}
+				<a style="margin-top: 5%;" href="/{{post['_id']}}-post" class="link">{{post['title']}}</a>
+				<a href="/{{post['username']}}" class="link">@{{post['username']}}</a> {{post['pub_date']}}
+				{% if user['username'] == username %}<a href="/delete-{{post['_id']}}" class="d">Delete Post</a>{% endif %}<br>
+				<span style="font-size: 95%; color: gray;">{{post['body']}}<span><br><br>
+			{% endfor %}
+		{% endif %}
+	</p>
+	<hr>
+{% endblock %}

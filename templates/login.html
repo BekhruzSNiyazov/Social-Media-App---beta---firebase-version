@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block body %}
+	<form method="post" action="/loggingin">
+		<center>
+			<h2 style="margin-top: 5%;">Login</h2>
+			<h4>Username</h4>
+			<input autofocus type="text" name="username" class="in"><br>
+			<h4>Password</h4>
+			<input type="password" name="password" class="in"><br>
+			<button type="submit" class="l">Login</button><br>
+			<span style="font-size: 90%; color: gray;">Don't have an account? <a href="/signup" class="a">Sign up here</a>.</span>
+		</center>
+	</form>
+{% endblock %}

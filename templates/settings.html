@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block body %}
+	<br>
+	<h2 style="margin-left: 5%;">Settings</h2>
+	<h4 style="margin-left: 5%; margin-top: 1%;">Your profile data</h4>
+	<p style="margin-left: 7%;">
+		Your username: {{user['username']}}<br>
+		Your email: {{user['email']}}<br>
+		Your first name: {{user['first']}}<br>
+		Your last name: {{user['last']}}<br>
+		<a href="/{{user['_id']}}" class="a">View your profile in details.</a><br>
+	</p>
+	<h4 style="margin-left: 5%;">Change your profile data</h4>
+	<p style="margin-left: 7%;">
+		<a href="/change" class="a">Change profile data.</a><br>
+		<a href="/change-password" class="a">Change password.</a><br>
+	</p>
+	<h4 style="margin-left: 5%;">Dangerous area</h4>
+	<p style="margin-left: 7%;">
+		<a href="/logout" class="d">Logout.</a><br>
+		{% if delete %}
+			<a href="/delete-all-password" class="d">Delete all posts. This cannot be undone.</a><br>
+		{% endif %}
+		<a href="/delete-account" class="d">Delete your account. This cannot be undone.</a><br>
+	</p>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Add Post{% endblock %}
+{% block body %}
+	<style type="text/css">
+		textarea {
+			border-radius: 15px;
+			font-size: 115%;
+		}
+	</style>
+	<center>
+		<form action="/adding-inside-{{_id}}" method="post">
+			<input type="text" name="title" class="in" autofocus placeholder="Please, insert the title:" value="{{title}}">
+			<button class="safe">Add Post</button>
+            <button class="danger" type="button"><a href="/" class="none_red">Cancel</a></button>
+			<textarea name="post" id="textarea" placeholder="Type your post here:" rows="18" style="width: 70%;">{{body}}</textarea><br>
+		</form>
+	</center>
+{% endblock %}

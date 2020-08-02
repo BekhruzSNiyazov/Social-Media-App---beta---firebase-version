@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Sign up{% endblock %}
+{% block body %}
+	<form action="/signingup" method="post">
+		<center>
+			<h2>Sign up</h2>
+			<h4>Username</h4>
+			<input autofocus type="text" name="username" class="in"><br>
+			<h4>Email</h4>
+			<input type="email" name="email" class="in"><br>
+			<h4>First Name</h4>
+			<input type="text" name="first" class="in"><br>
+			<h4>Last Name</h4>
+			<input type="text" name="last" class="in"><br>
+			<h4>Password</h4>
+			<input type="password" name="password" class="in"><br>
+			<h4>Password (Again)</h4>
+			<input type="password" name="apassword" class="in"><br>
+			<button type="submit" class="s">Sign Up</button><br>
+			<span style="color: gray; font-size: 90%;">Already have an account? <a href="/login" class="a">Login here</a>.</span>
+		</center>
+	</form>
+{% endblock %}

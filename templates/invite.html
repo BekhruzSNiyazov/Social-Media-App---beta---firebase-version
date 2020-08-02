@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Invite friends to {{group["name"]}}{% endblock %}
+{% block body %}
+	<h2 style="margin-left: 5%;">Invite</h2>
+	<span style="margin-left: 5%;">Invite friends to <a href="/{{group['_id']}}-group" class="link">{{group["name"]}}</a> group</span><br><br>
+	{% if friends %}
+		<input type="text" id="search" class="in" autofocus placeholder="Search" style="margin-left: 5%;">
+		<p style="margin-left: 5%; margin-right: 5%;">
+			<ol style="margin-left: 2.5%; margin-right: 5%;"></ol>
+		</p>
+	{% else %}
+		<center><h3 style="color: #d3d3d3; margin-top: 5%;">There are no friends that can be invited by you to this group.</h3></center>
+	{% endif %}
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+		let input = document.getElementById("search");
+		$.get("/searching-friends:{{group['_id']}}?q=" + input.value, function(data) {
+			document.querySelector("ol").innerHTML = data;
+		});
+		input.onkeyup = function() {
+			$.get("/searching-friends:{{group['_id']}}?q=" + input.value, function(data) {
+				document.querySelector("ol").innerHTML = data;
+			});
+		};
+	</script>
+{% endblock %}

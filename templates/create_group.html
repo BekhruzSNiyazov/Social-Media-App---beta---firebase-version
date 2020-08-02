@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Create Group{% endblock %}
+{% block body %}
+	<style type="text/css">
+		textarea {
+			border-radius: 10px;
+			font-size: 115%;
+		}
+	</style>
+	<form action="/creating-group" method="post">
+		<center>
+			<h4 style="margin-top: 5%;">Name</h4>
+			<input type="text" name="name" class="in" autofocus style="text-align: center;"><br>
+			<h4>Description</h4>
+			<textarea name="description" id="textarea" rows="2" style="width: 20%; text-align: center; font-size: 90%; color: gray;">{{body}}</textarea><br>
+			<h4>Group status</h4>
+			<select name="status" style="border-radius: 15px; width: 15%; margin-bottom: 1%;">
+				<option disabled selected value="">Status</option>
+				<option value="private">Private</option>
+				<option value="public">Public</option>
+			</select><br>
+			<button class="safe">Create Group</button>
+			<button class="danger" type="button"><a href="/" class="none_red">Cancel</a></button>
+		</center>
+	</form>
+{% endblock %}

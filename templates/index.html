@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Social Media App{% endblock %}
+{% block body %}
+	<style>
+		hr {
+			margin-left: 5%;
+			margin-right: 5%;
+		}
+	</style>
+	<span id="notifications"></span>	
+	{% if groups %}
+		<h4 style="margin-left: 5%;">Groups: </h4>
+		{% for group in groups %}
+			<a href="/{{groups[group]['_id']}}-group" class="link" style="margin-left: 7%;">{{groups[group]["name"]}}</a><br>
+		{% endfor %}
+		<hr>
+	{% endif %}
+	{% if posts %}
+		<h4 style="margin-left: 5%;">Posts: </h4>
+		{% for post in posts %}
+			<div style="margin-left: 7%; margin-right: 5%;">
+				<a class="link" href="{{post['_id']}}-post">{{post["title"]}}</a> 
+				<a class="link" href="/{{post['user_id']}}">@{{post["username"]}}</a> 
+				{{post["pub_date"]}} 
+				{% if grps[posts.index(post)] %}
+					 in <a href="/{{grps[posts.index(post)]['_id']}}-group" class="link">{{grps[posts.index(post)]["name"]}}</a> 
+				{% endif %} 
+				{% if post["username"] == user["username"] %}
+					<a href="/delete-{{post['_id']}}" class="d">Delete Post</a>
+				{% endif %}<br>
+				<div style="font-size: 95%; color: gray;">{{post["body"]}}</div>
+			</div>
+		{% endfor %}
+		<hr>
+	{% else %}
+		<center><h3 style="color: #d3d3d3; margin-top: 5%;">There are no posts yet. Create the first one by clicking the "Add Post" button above.</h3></center>
+	{% endif %}
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+		$.get("/notifications", function(data) {document.getElementById("notifications").innerHTML = data;});
+	</script>
+{% endblock %}

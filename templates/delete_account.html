@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Delete Account{% endblock %}
+{% block body %}
+	<center>
+		<form action="/deleting-account" method="POST">
+			<h4 style="margin-top: 5%;">Password</h4>
+			<input type="password" autofocus name="password" class="in"><br>
+			<button type="submit" class="danger">Delete Account</button>
+			<button class="safe"><a href="/settings" class="none_green">Cancel</a></button>
+		</form>
+	</center>
+{% endblock %}

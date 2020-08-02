@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block body %}
+	<br>
+	<h2 style="margin-left: 5%;">Search</h2>
+	<input type="text" id="search" class="in" autofocus style="margin-left: 5%;">
+	<p style="margin-left: 5%; margin-right: 5%;">
+		<ol style="margin-left: 2.5%; margin-right: 5%;"></ol>
+	</p>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+		let input = document.getElementById("search");
+		$.get("/searching?q=" + input.value, function(data) {
+			document.querySelector("ol").innerHTML = data;
+		});
+		input.onkeyup = function() {
+			$.get("/searching?q=" + input.value, function(data) {
+				document.querySelector("ol").innerHTML = data;
+			});
+		};
+	</script>
+{% endblock %}

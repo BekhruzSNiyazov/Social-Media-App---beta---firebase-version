@@ -1,0 +1,11 @@
+<style>
+	div {margin-left: 2%;}
+</style>
+{% if users %}
+	{% for user in users %}
+        @{{user['username']}} <a href="/inviting-{{user['_id']}}:{{group['_id']}}" class="a">Invite</a><br>
+	{% endfor %}
+	<hr>
+{% else %}
+    <center><h3 style="color: #d3d3d3; margin-top: 5%;">There are no users that can be invited by you to this group.</h3></center>
+{% endif %}

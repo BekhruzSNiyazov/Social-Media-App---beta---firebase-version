@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Library{% endblock %}
+{% block body %}
+	<style>
+		hr {margin-left: 5%; margin-right: 5%;}
+		h4 {margin-left: 5%;}
+		.new_div {margin-left: 7%;}
+	</style>
+	<p style="margin-left: 5%; margin-top: 0.2%;">
+		<br>
+		<h2 style="margin-left: 5%;">Library</h2>
+		<hr>
+		<h4>Groups:</h4>
+		{% for group in groups %}
+			<div class="new_div"><a href="/{{group['_id']}}-group" class="link">{{group["name"]}}</a></div>
+		{% endfor %}
+		<hr>
+		<h4>Your friends:</h4>
+		{% for friend in friends %}
+			<div class="new_div"><a class="link" href="/{{friend['_id']}}">@{{friend["username"]}}</a> <a href="/delete-friend-{{friend['_id']}}" class="d">Remove from friends</a></div>
+		{% endfor %}
+		<hr>
+		<h4>You are following:</h4>
+		{% for follower in following %}
+			<div class="new_div"><a class="link" href="/{{follower['_id']}}">@{{follower["username"]}}</a> <a href="/unfollow-{{follower['_id']}}" class="d">Unfollow.</a></div>
+		{% endfor %}
+		<hr>
+		<h4>Users, following you:</h4>
+		{% for follower in followers %}
+			<div class="new_div"><a class="link" href="/{{follower['_id']}}">@{{follower["username"]}}</a> {% if follower not in following %} <a href="/add-follower-{{user['_id']}}:{{follower['_id']}}" class="a">Follow.</a>{% endif %}</div>
+		{% endfor %}
+		<hr>
+		<h4>Liked posts:</h4>
+		{% for post in liked_posts %}
+		<div class="new_div">
+			<a class="link" href="{{post['_id']}}-post">{{post["title"]}}</a> <a class="link" href="/{{user['_id']}}">@{{post["username"]}}</a> {{post["pub_date"]}}<br>
+			<span style="font-size: 95%; color: gray;">{{post["body"]}}</span>
+		</div>
+		<br>
+		{% endfor %}
+		<hr>
+		<h4>Saved posts:</h4>
+		{% for post in saved_posts %}
+			<div class="new_div">
+				<a class="link" href="{{post['_id']}}-post">{{post["title"]}}</a> <a class="link" href="/{{user['_id']}}">@{{post["username"]}}</a> {{post["pub_date"]}}<br>
+				<span style="font-size: 95%; color: gray;">{{post["body"]}}</span>
+			</div>
+			<br>
+		{% endfor %}
+		<hr>
+		<h4>Received posts:</h4>
+		{% for key in received_posts.keys() %}
+			<div class="new_div">
+				<a class="link" href="{{post[key]['_id']}}-post">{{post[key]["title"]}}</a> <a class="link" href="/{{users[l_r_p.index(post)]['_id']}}">@{{post[key]["username"]}}</a> {{post[key]["pub_date"]}} shared by <a href="/{{received_posts[post]['_id']}}" class="link">@{{received_posts[post]["username"]}}</a><br>
+				<span style="font-size: 95%; color: gray;">{{post[key]["body"]}}</span>
+			</div>
+			<br>
+		{% endfor %}
+		<hr>
+		<h4>Your posts:</h4>
+		{% for post in posts %}
+			<div class="new_div">
+				<a class="link" href="{{post['_id']}}-post">{{post["title"]}}</a> <a class="link" href="/{{user['_id']}}">@{{post["username"]}}</a> {{post["pub_date"]}} <a href="/delete-{{post['_id']}}" class="d">Delete Post</a><br>
+				<span style="font-size: 95%; color: gray;">{{post["body"]}}</span>
+			</div>
+			<br>
+		{% endfor %}
+		<hr>
+	</p>
+{% endblock %}

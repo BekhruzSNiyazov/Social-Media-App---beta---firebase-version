@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Email Verification{% endblock %}
+{% block body %}
+    <form action="/verifying" method="post">
+        <center>
+            <h2>Please, type here the verification code you received in email:</h2>
+            <input class="in" autofocus type="number" name="code">
+            <button class="l" type="submit">Verify</button>
+        </center>
+    </form>
+{% endblock %}

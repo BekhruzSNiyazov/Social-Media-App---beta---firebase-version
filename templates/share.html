@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Share post with friends{% endblock %}
+{% block body %}
+	<h2 style="margin-left: 5%;">Share</h2>
+	<span style="margin-left: 5%;">Share <a href="/{{post['_id']}}-post" class="link">post</a> with friends</span><br><br>
+	{% if friends %}
+		{% for friend in friends %}
+			<span style="margin-left: 5%;">@{{friend['username']}} <a href="/sharing-{{friend['_id']}}:{{post['_id']}}:{{user['_id']}}">Share</a></span><br>
+		{% endfor %}
+	{% else %}
+		<center><h3 style="color: #d3d3d3; margin-top: 5%;">There are no friends that you can share this post with.</h3></center>
+	{% endif %}
+{% endblock %}

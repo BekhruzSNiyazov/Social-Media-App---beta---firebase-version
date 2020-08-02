@@ -1,0 +1,27 @@
+<style>
+	.new_d {margin-left: 2%;}
+</style>
+{% if users %}
+	<h4>Users</h4>
+	{% for user in users %}
+		<div class="new_d"><a href="/{{user['_id']}}" class="a">@{{user["username"]}} ({{user["first"]}} {{user["last"]}})</a></div>
+	{% endfor %}
+	<hr>
+{% endif %}
+{% if groups %}
+	<h4>Groups</h4>
+	{% for group in groups %}
+		<div class="new_d"><a href="/{{group['_id']}}-group" class="a">{{group["name"]}}</a></div>
+	{% endfor %}
+	<hr>
+{% endif %}
+{% if posts %}
+	<h4>Posts</h4>
+	{% for post in posts %}
+		<div class="new_d">
+			<a class="link" href="{{post['_id']}}-post">{{post['title']}}</a> @{{post['username']}} {{post['pub_date']}}<br>
+			<span style="font-size: 95%; color: gray;">{{post['body']}}</span>
+		</div>
+	{% endfor %}
+	<hr>
+{% endif %}

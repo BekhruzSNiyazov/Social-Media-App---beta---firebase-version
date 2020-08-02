@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{post['title']}}{% endblock %}
+{% block body %}
+	<div style="margin-left: 15%; margin-right: 15%; margin-top: 2%;">
+		<h1>{{post['title']}}</h1>
+		<p>{% for c in post['body'] %}{% if c == '\n'%}<br>{% endif %}{{c}}{% endfor %}</p>
+		<span>This post was published on {{post['pub_date']}} {% if group %} in <a href="/{{group['_id']}}-group" class="link">{{group['name']}}</a> {% endif %} by <a href="/{{_id}}" class="link">@{{post['username']}}</a>.</span><br>
+		{% if likeable %}
+			<button onclick="like();" class="none_button" id="like">👍Like ({{post['likes']}})</button>
+		{% else %}
+			👍Liked by {{post['likes']}} users.
+		{% endif %}
+		{% if saveable %}
+			<button onclick="save();" class="none_button" id="save">📝Save ({{post['saved']}})</button><br>
+		{% else %}
+			📝Saved by {{post['saved']}} users.
+		{% endif %}
+		<a href="/share-{{post['_id']}}" class="a">Share post</a><br>
+		<hr>
+		<form action="/add-comment-{{post['_id']}}" method="POST">
+			<textarea name="text" placeholder="Add a public comment" rows="3" style="border-radius: 10px; width: 100%;"></textarea>
+			<button class="l">Add</button>
+		</form>
+		<hr>
+		<span>
+			{% for comment in comments %}
+				<br>
+				<a class="link" href="/{{comment['user_id']}}">@{{comment['username']}}</a> {{comment['pub_date']}} {% if comment in delete %}<a href="/delete-comment-{{comment['_id']}}" class="d">Delete Comment</a>{% endif %}<br>
+				{% for c in comment['text'] %}{% if c == '\n'%}<br>{% endif %}{{c}}{% endfor %}<br>
+			{% endfor %}
+		</span>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+		function like() {
+			$.get("/{{post['_id']}}-like", function(data) {
+				document.getElementById("like").innerHTML = "👍Liked by " + data + " users. ";
+			});
+		}
+		function save() {
+			$.get("/{{post['_id']}}-save", function(data) {
+				document.getElementById("save").innerHTML = "📝Saved by " + data + " users.";
+			});
+		}
+	</script>
+{% endblock %}

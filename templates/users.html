@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Users{% endblock %}
+{% block body %}
+	<br>
+	<h2 style="margin-left: 5%;">Users</h2>
+	{% if keys %}
+		{% for key in keys %}
+			<div style="margin-left: 5%;">{{keys.index(key)+1}}. <a href="/{{values[keys.index(key)]['_id']}}" class="a">@{{values[keys.index(key)]["username"]}} ({{values[keys.index(key)]["first"]}} {{values[keys.index(key)]["last"]}})</a></div>
+		{% endfor %}
+	{% else %}
+	<center><h3 style="color: #d3d3d3; margin-top: 5%;">There are no users yet. You will be the first!</h3></center>
+	{% endif %}
+{% endblock %}

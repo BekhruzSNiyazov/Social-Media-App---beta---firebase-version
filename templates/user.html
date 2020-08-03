@@ -10,7 +10,7 @@
 		Last name: {{last}}<br>
 		<a href="mailto:{{email}}" class="a">Send an email to @{{username}}.</a>
 	</p>
-	{% if not friend %}<a href="/add-friend-{{_id}}" class="a" style="margin-left: 5%;">Add as a friend['</']a><br>{% endif %}
+	{% if not friend %}<a href="/add-friend-{{_id}}" class="a" style="margin-left: 5%;">Add as a friend</a><br>{% endif %}
 	{% if follower %}
 		<a href="/unfollow-{{_id}}" class="d" style="margin-left: 5%;">Unfollow.</a><br>
 	{% else %}

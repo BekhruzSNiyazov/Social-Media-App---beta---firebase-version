@@ -1,17 +1,17 @@
 {% if notifications %}
 	<h5 style="margin-left: 5%;">Notifications: </h5>
 	<style>.new_span {margin-left: 7%;}</style>
-	{% for user in friend_notifications %}
-		<span class="new_span"><a href="/{{user['_id']}}" class="link">@{{user['username']}}</a> wants to be your friend. <a href="/delete-notification-friend-{{user['_id']}}" class="a">Accept friendship.</a></span><br>
+	{% for usr in friend_notifications %}
+		<span class="new_span"><a href="/{{usr['_id']}}" class="link">@{{usr['username']}}</a> wants to be your friend. <a href="/delete-notification-friend-{{usr['_id']}}" class="a">Accept friendship.</a></span><br>
 	{% endfor %}
-	{% for user in now_friend_notifications %}
-		<span class="new_span"><a href="/{{user['_id']}}" class="link">@{{user['username']}}</a> is now your friend. <a href="/delete-notification-now-friend-{{user['_id']}}" class="a">Mark as read.</a></span><br>
+	{% for usr in now_friend_notifications %}
+		<span class="new_span"><a href="/{{usr['_id']}}" class="link">@{{usr['username']}}</a> is now your friend. <a href="/delete-notification-now-friend-{{usr['_id']}}" class="a">Mark as read.</a></span><br>
 	{% endfor %}
 	{% for post in share_notifications %}
 		<span class="new_span"><a href="{{share_notifications[post]['_id']}}" class="link">@{{share_notifications[post]["username"]}}</a> shared with you "{{post["title"]}}" post. <a href="/delete-notification-post-{{post['_id']}}:{{share_notifications[post]['_id']}}" class="link">View post.</a></span><br>
 	{% endfor %}
-	{% for user in follower_notifications %}
-		<span class="new_span"><a href="/{{user['_id']}}" class="link">@{{user['username']}}</a> is now following you. <a href="/delete-notification-now-following-{{user['_id']}}" class="a">Mark as read.</a></span><br>
+	{% for usr in follower_notifications %}
+		<span class="new_span"><a href="/{{usr['_id']}}" class="link">@{{usr['username']}}</a> is now following you. <a href="/delete-notification-now-following-{{usr['_id']}}" class="a">Mark as read.</a></span><br>
 	{% endfor %}
 	{% for post in added_post_notifications %}
 		<span class="new_span"><a href="/{{post['user_id']}}" class="link">@{{post["username"]}}</a> added a new post: <a href="/{{post['_id']}}-post" class="link">{{post["title"]}}.</a> <a href="/delete-notification-added-post-{{post['_id']}}" class="a">Mark as read.</a></span><br>

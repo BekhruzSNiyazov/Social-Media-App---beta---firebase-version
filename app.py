@@ -115,7 +115,7 @@ def index():
 		users = all_users()
 		groups = all_groups()
 		psts = all_posts()
-		li_psts = list(psts)
+		li_psts = list(reversed(psts))
 		posts = []
 		grps = []
 		for post in li_psts:
@@ -466,23 +466,23 @@ def deleting_account():
 				users = all_users()
 				posts = get_post("username", session["username"])
 				ids = []
-				for post in posts: ids.append(str(post["_id"]))
+				for post in posts: ids.append(post["_id"])
 				for user in users:
 					for _id in ids:
 						if _id in user["liked_items"].split():
 							liked_items = user["liked_items"].replace(f"{_id} ", "")
-							firebase.put("/users/" + str(user["_id"]), "liked_items", liked_items)
+							firebase.put("/users/" + user["_id"], "liked_items", liked_items)
 						if _id in user["saved_items"].split():
 							saved_items = user["saved_items"].replace(f"{_id} ", "")
-							firebase.put("/users/" + str(user["_id"]), "saved_items", saved_items)
+							firebase.put("/users/" + user["_id"], "saved_items", saved_items)
 						if _id in user["commented_items"].split():
 							commented_items = user["commented_items"].replace(f"{_id} ", "")
-							firebase.put("/users/" + str(user["_id"]), "commented_items", commented_items)
+							firebase.put("/users/" + user["_id"], "commented_items", commented_items)
 				for post in posts:
 					if post["group"]:
 						group = get_group("_id", post["group"])
-						posts = group["posts"].replace(str(post["_id"]) + " ", "")
-						firebase.put("/group/" + str(group["_id"]), "posts", posts)
+						posts = group["posts"].replace(post["_id"] + " ", "")
+						firebase.put("/group/" + group["_id"], "posts", posts)
 				for post in posts: firebase.delete("/posts", post["_id"])
 			if usr["liked_items"] != "":
 				for _id in usr["liked_items"].split():
@@ -645,7 +645,7 @@ def searching():
 			for q in query.split():
 				if psts[_id] in posts: break
 				for word in psts[_id]["title"].lower().split():
-					if q == word or word.startswith(q) or q.startswith(word):
+					if q == word or word.startswith(q) or q.startswith(word) or word.endswith(q) or q.endswith(word):
 						posts.append(psts[_id])
 						break
 		usrs = all_users()
@@ -655,7 +655,7 @@ def searching():
 			if usrs[_id]["last"].lower().startswith(query) and usrs[_id] not in users: users.append(usrs[_id])
 		grps = all_groups()
 		for _id in grps:
-			if grps[_id]["name"].lower().startswith(query): groups.append(grps[_id])
+			if grps[_id]["name"].lower().startswith(query) or group[_id]["name"].lower().endswith(query): groups.append(grps[_id])
 			for q in query.split():
 				if grps[_id] in groups: break
 				for word in grps[_id]["description"].lower().split():
@@ -693,7 +693,6 @@ def changing_password():
 def library():
 	if "username" in session:
 		posts = get_post("username", session["username"])
-		for i in range(100): print(posts)
 		user = get_user("username", session["username"])
 		friends = []
 		for _id in user["friends"].split():
@@ -786,6 +785,7 @@ def add_comment(_id):
 def post(_id):
 	if "username" in session:
 		post = get_post("_id", _id)
+		if not post: return render_template("error.html")
 		user = get_user("username", session["username"])
 		group = None
 		if post["group"]:
@@ -1084,16 +1084,16 @@ def adding_post_group(_id):
 @app.route("/add-follower-<info>")
 def add_follower(info):
 	if "username" in session:
-		user = get_user("_id", int(info.split(":")[0]))
-		follower = get_user("_id", int(info.split(":")[1]))
-		if str(follower._id) not in user["following"].split():
-			following = user["following"] + str(follower["_id"]) + " "
-			followers = follower["followers"] + str(user["_id"]) + " "
-			firebase.put("/users/" + str(user["_id"]), "following", following)
-			firebase.put("/users/" + str(follower["_id"]), "followers", followers)
+		user = get_user("_id", info.split(":")[0])
+		follower = get_user("_id", info.split(":")[1])
+		if follower["_id"] not in user["following"].split():
+			following = user["following"] + follower["_id"] + " "
+			followers = follower["followers"] + user["_id"] + " "
+			firebase.put("/users/" + user["_id"], "following", following)
+			firebase.put("/users/" + follower["_id"], "followers", followers)
 		follower_notifications = follower["follower_notifications"] + str(user["_id"]) + " "
-		firebase.put("/users/" + str(user["_id"]), "follower_notifications", follower_notifications)
-		return redirect("/" + str(follower["_id"]))
+		firebase.put("/users/" + follower["_id"], "follower_notifications", follower_notifications)
+		return redirect("/" + follower["_id"])
 	flash(login_message)
 	return redirect(url_for("login"))
 
@@ -1102,10 +1102,10 @@ def unfollow(_id):
 	if "username" in session:
 		user = get_user("username", session["username"])
 		following = user["following"].replace(_id + " ", "")
-		firebase.put("/users/" + str(user["_id"]), "following", following)
+		firebase.put("/users/" + user["_id"], "following", following)
 		following_user = get_user("_id", _id)
-		followers = following["followers"].replace(str(user["_id"]) + " ", "")
-		firebase.put("/users/" + str(following_user["_id"]), "followers", followers)
+		followers = following_user["followers"].replace(user["_id"] + " ", "")
+		firebase.put("/users/" + following_user["_id"], "followers", followers)
 		return redirect(url_for("index"))
 	flash(login_message)
 	return redirect(url_for("login"))
@@ -1184,7 +1184,14 @@ def user(_id):
 	if "username" in session:
 		user = get_user("_id", _id)
 		if user:
-			posts = get_post("username", user["username"])
+			psts = get_post("username", user["username"])
+			posts = []
+			num = 97
+			for post in list(reversed(psts)):
+				if len(post["body"]) > 100:
+					if post["body"][:num] == ".": post["body"] += ".."
+					else: post["body"] = post["body"][:num] + "..."
+				posts.append(post)
 			friend = True
 			follower = False
 			followers = []

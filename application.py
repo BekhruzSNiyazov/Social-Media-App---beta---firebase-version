@@ -469,15 +469,15 @@ def deleting_account():
 				for post in posts: ids.append(post["_id"])
 				for user in users:
 					for _id in ids:
-						if _id in user["liked_items"].split():
-							liked_items = user["liked_items"].replace(f"{_id} ", "")
-							firebase.put("/users/" + user["_id"], "liked_items", liked_items)
-						if _id in user["saved_items"].split():
-							saved_items = user["saved_items"].replace(f"{_id} ", "")
-							firebase.put("/users/" + user["_id"], "saved_items", saved_items)
-						if _id in user["commented_items"].split():
-							commented_items = user["commented_items"].replace(f"{_id} ", "")
-							firebase.put("/users/" + user["_id"], "commented_items", commented_items)
+						if _id in users[_id]["liked_items"].split():
+							liked_items = users[_id]["liked_items"].replace(f"{_id} ", "")
+							firebase.put("/users/" + _id, "liked_items", liked_items)
+						if _id in user[_id]["saved_items"].split():
+							saved_items = users[_id]["saved_items"].replace(f"{_id} ", "")
+							firebase.put("/users/" + _id, "saved_items", saved_items)
+						if _id in user[_id]["commented_items"].split():
+							commented_items = user[_id]["commented_items"].replace(f"{_id} ", "")
+							firebase.put("/users/" + _id, "commented_items", commented_items)
 				for post in posts:
 					if post["group"]:
 						group = get_group("_id", post["group"])

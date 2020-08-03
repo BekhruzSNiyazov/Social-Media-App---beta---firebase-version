@@ -115,7 +115,7 @@ def index():
 		users = all_users()
 		groups = all_groups()
 		psts = all_posts()
-		li_psts = list(psts)
+		li_psts = list(reversed(list(psts)))
 		posts = []
 		grps = []
 		for post in li_psts:

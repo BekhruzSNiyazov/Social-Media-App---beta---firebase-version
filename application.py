@@ -563,15 +563,15 @@ def delete_all():
 			users = all_users()
 			for user in users:
 				for _id in ids:
-					if _id in user["liked_items"].split():
-						liked_items = user["liked_items"].replace(f"{_id} ", "")
-						firebase.put("/users/" + str(user["_id"]), "liked_items", liked_items)
-					if _id in user["saved_items"].split():
-						saved_items = user["saved_items"].replace(f"{_id} ", "")
-						firebase.put("/users/" + str(user["_id"]), "saved_items", saved_items)
-					if _id in user["commented_items"].split():
-						commented_items = user["commented_items"].replace(f"{_id} ", "")
-						firebase.put("/users/" + str(user["_id"]), "commented_items", commented_items)
+					if _id in users[user]["liked_items"].split():
+						liked_items = users[user]["liked_items"].replace(f"{_id} ", "")
+						firebase.put("/users/" + user, "liked_items", liked_items)
+					if _id in users[user]["saved_items"].split():
+						saved_items = users[user]["saved_items"].replace(f"{_id} ", "")
+						firebase.put("/users/" + user, "saved_items", saved_items)
+					if _id in users[user]["commented_items"].split():
+						commented_items = users[user]["commented_items"].replace(f"{_id} ", "")
+						firebase.put("/users/" + user, "commented_items", commented_items)
 			for post in posts:
 				if post["group"]:
 					group = get_group("_id", post["group"])

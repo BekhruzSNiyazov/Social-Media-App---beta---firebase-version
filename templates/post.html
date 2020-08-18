@@ -7,7 +7,10 @@
 			<img src="{{url}}" alt="{{post['file']}}" height="50%" width="50%">
 		{% endif %}
 		<p>{% for c in post['body'] %}{% if c == '\n'%}<br>{% endif %}{{c}}{% endfor %}</p>
-		<span>This post was published on {{post['pub_date']}} {% if group %} in <a href="/{{group['_id']}}-group" class="link">{{group['name']}}</a> {% endif %} by <a href="/{{_id}}" class="link">@{{post['username']}}</a>.</span><br>
+		{% if download %}
+			@{{post['username']}} have attached <a href="{{download}}" class="a" download>this </a> file to the post.
+		{% endif %}
+		<div>This post was published on {{post['pub_date']}} {% if group %} in <a href="/{{group['_id']}}-group" class="link">{{group['name']}}</a> {% endif %} by <a href="/{{_id}}" class="link">@{{post['username']}}</a>.</div><br>
 		{% if likeable %}
 			<button onclick="like();" class="none_button" id="like">👍Like ({{post['likes']}})</button>
 		{% else %}

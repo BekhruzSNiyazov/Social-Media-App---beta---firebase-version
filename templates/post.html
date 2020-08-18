@@ -4,7 +4,7 @@
 	<div style="margin-left: 15%; margin-right: 15%; margin-top: 2%;">
 		<h1>{{post['title']}}</h1>
 		{% if url %}
-			<img src="{{url}}" alt="{{post['file']}}">
+			<img src="{{url}}" alt="{{post['file']}}" height="50%" width="50%">
 		{% endif %}
 		<p>{% for c in post['body'] %}{% if c == '\n'%}<br>{% endif %}{{c}}{% endfor %}</p>
 		<span>This post was published on {{post['pub_date']}} {% if group %} in <a href="/{{group['_id']}}-group" class="link">{{group['name']}}</a> {% endif %} by <a href="/{{_id}}" class="link">@{{post['username']}}</a>.</span><br>

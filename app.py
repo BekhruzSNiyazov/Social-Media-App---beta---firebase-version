@@ -3,10 +3,24 @@ from firebase import firebase
 from datetime import datetime
 import smtplib
 import random
+import pyrebase
 
 app = Flask(__name__)
-firebase = firebase.FirebaseApplication("https://test-30d03.firebaseio.com/", None)
 app.secret_key = b"_5#y2L'F4Q8z\n\xec]/"
+firebase = firebase.FirebaseApplication("https://test-30d03.firebaseio.com/", None)
+
+config = {
+	"apiKey": "AIzaSyAis3iYAb8NTNvuGMgA0REQH7Gek1PhB0Q",
+	"authDomain": "test-30d03.firebaseapp.com",
+	"databaseURL": "https://test-30d03.firebaseio.com",
+	"projectId": "test-30d03",
+	"storageBucket": "test-30d03.appspot.com",
+	"messagingSenderId": "340644656849",
+	"appId": "1:340644656849:web:29c63825ee0120ffdbb7f0",
+	"measurementId": "G-YFFLPQN8YW"
+}
+pyrebase = pyrebase.initialize_app(config=config)
+storage = pyrebase.storage()
 
 code = random.randrange(1000, 5000)
 login_message = "You need to login or sign up first!"
@@ -115,7 +129,7 @@ def index():
 		users = all_users()
 		groups = all_groups()
 		psts = all_posts()
-		li_psts = list(reversed(psts))
+		li_psts = list(reversed(list(psts)))
 		posts = []
 		grps = []
 		for post in li_psts:
@@ -380,6 +394,8 @@ def adding():
 				follower = get_user("_id", _id)
 				post_added_notifications = follower["post_added_notifications"] + str(len(all_posts())+1) + " "
 				firebase.put("/users/" + str(follower["_id"]), "post_added_notifications", post_added_notifications)
+			_file = ""
+			if "file" in request.files: _file = request.files["file"].filename
 			pst = {
 				"_id": "",
 				"username": session["username"],
@@ -390,10 +406,14 @@ def adding():
 				"likes": 0,
 				"saved": 0,
 				"comments": 0,
-				"group": 0
+				"group": "",
+				"file": _file
 			}
 			result = firebase.post("/posts", pst)
 			firebase.put("/posts/" + result["name"], "_id", result["name"])
+			if _file:
+				_file = request.files["file"]
+				storage.child(f"/{result['name']}/" + _file.filename).put(_file)
 			return redirect(f"/{result['name']}-post")
 		else:
 			flash("You need to fill all the fields!")
@@ -469,15 +489,15 @@ def deleting_account():
 				for post in posts: ids.append(post["_id"])
 				for user in users:
 					for _id in ids:
-						if _id in user["liked_items"].split():
-							liked_items = user["liked_items"].replace(f"{_id} ", "")
-							firebase.put("/users/" + user["_id"], "liked_items", liked_items)
-						if _id in user["saved_items"].split():
-							saved_items = user["saved_items"].replace(f"{_id} ", "")
-							firebase.put("/users/" + user["_id"], "saved_items", saved_items)
-						if _id in user["commented_items"].split():
-							commented_items = user["commented_items"].replace(f"{_id} ", "")
-							firebase.put("/users/" + user["_id"], "commented_items", commented_items)
+						if _id in users[user]["liked_items"].split():
+							liked_items = users[user]["liked_items"].replace(f"{_id} ", "")
+							firebase.put("/users/" + user, "liked_items", liked_items)
+						if _id in users[user]["saved_items"].split():
+							saved_items = users[user]["saved_items"].replace(f"{_id} ", "")
+							firebase.put("/users/" + user, "saved_items", saved_items)
+						if _id in users[user]["commented_items"].split():
+							commented_items = users[user]["commented_items"].replace(f"{_id} ", "")
+							firebase.put("/users/" + user, "commented_items", commented_items)
 				for post in posts:
 					if post["group"]:
 						group = get_group("_id", post["group"])
@@ -563,15 +583,15 @@ def delete_all():
 			users = all_users()
 			for user in users:
 				for _id in ids:
-					if _id in user["liked_items"].split():
-						liked_items = user["liked_items"].replace(f"{_id} ", "")
-						firebase.put("/users/" + str(user["_id"]), "liked_items", liked_items)
-					if _id in user["saved_items"].split():
-						saved_items = user["saved_items"].replace(f"{_id} ", "")
-						firebase.put("/users/" + str(user["_id"]), "saved_items", saved_items)
-					if _id in user["commented_items"].split():
-						commented_items = user["commented_items"].replace(f"{_id} ", "")
-						firebase.put("/users/" + str(user["_id"]), "commented_items", commented_items)
+					if _id in users[user]["liked_items"].split():
+						liked_items = users[user]["liked_items"].replace(f"{_id} ", "")
+						firebase.put("/users/" + user, "liked_items", liked_items)
+					if _id in users[user]["saved_items"].split():
+						saved_items = users[user]["saved_items"].replace(f"{_id} ", "")
+						firebase.put("/users/" + user, "saved_items", saved_items)
+					if _id in users[user]["commented_items"].split():
+						commented_items = users[user]["commented_items"].replace(f"{_id} ", "")
+						firebase.put("/users/" + user, "commented_items", commented_items)
 			for post in posts:
 				if post["group"]:
 					group = get_group("_id", post["group"])
@@ -792,6 +812,11 @@ def post(_id):
 			group = get_group("_id", post["group"])
 			if group["status"] == "private":
 				if str(user["_id"]) not in group["members"].split(): return redirect(url_for("index"))
+		url = ""
+		if post["file"]:
+			ext = post["file"].split(".")[1]
+			imgs = ["jpg", "png", "raw", "bmp", "jfif", "gif"]
+			if ext in imgs: url = f"https://firebasestorage.googleapis.com/v0/b/test-30d03.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
 		liked_items = user["liked_items"].split()
 		saved_items = user["saved_items"].split()
 		likeable = True
@@ -807,7 +832,7 @@ def post(_id):
 		if comments:
 			for comment in comments:
 				if comment["username"] == session["username"]: delete.append(comment)
-		return render_template("post.html", post=post, likeable=likeable, saveable=saveable, comments=comments, delete=delete, user=user, _id=post["user_id"], group=group)
+		return render_template("post.html", post=post, likeable=likeable, saveable=saveable, comments=comments, delete=delete, user=user, _id=post["user_id"], group=group, url=url)
 	flash(login_message)
 	return redirect(url_for("login"))
 

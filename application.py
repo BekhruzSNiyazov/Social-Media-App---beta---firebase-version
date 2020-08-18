@@ -411,9 +411,8 @@ def adding():
 			}
 			result = firebase.post("/posts", pst)
 			firebase.put("/posts/" + result["name"], "_id", result["name"])
-			if _file:
-				_file = request.files["file"]
-				storage.child(f"/{result['name']}/" + _file.filename).put(_file)
+			if _file: _file = request.files["file"]
+			storage.child(f"/{result['name']}/" + _file.filename).put(_file)
 			return redirect(f"/{result['name']}-post")
 		else:
 			flash("You need to fill all the fields!")
@@ -813,10 +812,12 @@ def post(_id):
 			if group["status"] == "private":
 				if str(user["_id"]) not in group["members"].split(): return redirect(url_for("index"))
 		url = ""
+		download = ""
 		if post["file"]:
 			ext = post["file"].split(".")[1]
 			imgs = ["jpg", "png", "raw", "bmp", "jfif", "gif"]
 			if ext in imgs: url = f"https://firebasestorage.googleapis.com/v0/b/test-30d03.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
+			else: download = f"https://firebasestorage.googleapis.com/v0/b/test-30d03.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
 		liked_items = user["liked_items"].split()
 		saved_items = user["saved_items"].split()
 		likeable = True
@@ -832,7 +833,8 @@ def post(_id):
 		if comments:
 			for comment in comments:
 				if comment["username"] == session["username"]: delete.append(comment)
-		return render_template("post.html", post=post, likeable=likeable, saveable=saveable, comments=comments, delete=delete, user=user, _id=post["user_id"], group=group, url=url)
+		return render_template("post.html", post=post, likeable=likeable, saveable=saveable,\
+			comments=comments, delete=delete, user=user, _id=post["user_id"], group=group, url=url, download=download)
 	flash(login_message)
 	return redirect(url_for("login"))
 
@@ -1077,6 +1079,8 @@ def adding_post_group(_id):
 			date = str(datetime.now())[:10]
 			date = f"{date[5]}{date[6]}/{date[-2]}{date[-1]}/{date[0]}{date[1]}{date[2]}{date[3]}"
 			user = get_user("username", session["username"])
+			_file = ""
+			if "file" in request.files: _file = request.files["file"].filename
 			post = {
 				"_id": "",
 				"username": session["username"],
@@ -1087,10 +1091,13 @@ def adding_post_group(_id):
 				"likes": 0,
 				"saved": 0,
 				"comments": 0,
-				"group": ""
+				"group": "",
+				"file": _file
 			}
 			result = firebase.post("/posts", post)
 			firebase.put("/posts/" + result["name"], "_id", result["name"])
+			if _file: _file = request.files["file"]
+			storage.child(f"/{result['name']}/" + _file.filename).put(_file)
 			group = get_group("_id", _id)
 			post = get_post("_id", result["name"])["_id"]
 			group_posts = group["posts"] + str(post) + " "

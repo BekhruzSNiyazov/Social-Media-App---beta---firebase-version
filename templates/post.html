@@ -21,7 +21,7 @@
 		{% else %}
 			📝Saved by {{post['saved']}} users.
 		{% endif %}
-		<a href="/share-{{post['_id']}}" class="a">Share post</a><br>
+		<a href="/share-{{post['_id']}}" style="color: black;">Share post</a><br>
 		<hr>
 		<form action="/add-comment-{{post['_id']}}" method="POST">
 			<textarea name="text" placeholder="Add a public comment" rows="3" style="border-radius: 10px; width: 100%;"></textarea>

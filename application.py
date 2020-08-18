@@ -765,9 +765,9 @@ def share(_id):
 @app.route("/sharing-<info>")
 def sharing(info):
 	if "username" in session:
-		user_id = int(info.split(":")[0])
-		_id = int(info.split(":")[1])
-		post_id = int(info.split(":")[2])
+		user_id = info.split(":")[0]
+		_id = info.split(":")[1]
+		post_id = info.split(":")[2]
 		user = get_user("_id", user_id)
 		shared_notifications = str(_id) + ":" + str(post_id) + " "
 		firebase.put("/users/" + str(user["_id"]), "shared_notifications", shared_notifications)

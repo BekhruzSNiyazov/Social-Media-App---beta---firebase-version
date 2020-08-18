@@ -1,5 +1,5 @@
 flask
-flask_session
 gunicorn
 python-firebase
 requests
+pyrebase

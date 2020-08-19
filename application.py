@@ -10,14 +10,14 @@ app.secret_key = b"_5#y2L'F4Q8z\n\xec]/"
 firebase = firebase.FirebaseApplication("https://test-30d03.firebaseio.com/", None)
 
 config = {
-	"apiKey": "AIzaSyAis3iYAb8NTNvuGMgA0REQH7Gek1PhB0Q",
-	"authDomain": "test-30d03.firebaseapp.com",
-	"databaseURL": "https://test-30d03.firebaseio.com",
-	"projectId": "test-30d03",
-	"storageBucket": "test-30d03.appspot.com",
-	"messagingSenderId": "340644656849",
-	"appId": "1:340644656849:web:29c63825ee0120ffdbb7f0",
-	"measurementId": "G-YFFLPQN8YW"
+	"apiKey": "AIzaSyCcyRivX98VxvhYFTY1AAR0vRPwOM4Tmho",
+	"authDomain": "social-media-app-b7343.firebaseapp.com",
+	"databaseURL": "https://social-media-app-b7343.firebaseio.com",
+	"projectId": "social-media-app-b7343",
+	"storageBucket": "social-media-app-b7343.appspot.com",
+	"messagingSenderId": "333439697229",
+	"appId": "1:333439697229:web:556da6346baaab8ca2b704",
+	"measurementId": "G-4XFJ4E6FWH"
 }
 pyrebase = pyrebase.initialize_app(config=config)
 storage = pyrebase.storage()

@@ -12,9 +12,9 @@ firebase = firebase.FirebaseApplication("https://test-30d03.firebaseio.com/", No
 config = {
 	"apiKey": "AIzaSyCcyRivX98VxvhYFTY1AAR0vRPwOM4Tmho",
 	"authDomain": "social-media-app-b7343.firebaseapp.com",
-	"databaseURL": "https://test-30d03.firebaseio.com",
+	"databaseURL": "https://social-media-app-b7343.firebaseio.com",
 	"projectId": "social-media-app-b7343",
-	"storageBucket": "test-30d03.firebaseapp.com",
+	"storageBucket": "social-media-app-b7343.appspot.com",
 	"messagingSenderId": "333439697229",
 	"appId": "1:333439697229:web:556da6346baaab8ca2b704",
 	"measurementId": "G-4XFJ4E6FWH"

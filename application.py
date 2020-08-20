@@ -12,9 +12,9 @@ firebase = firebase.FirebaseApplication("https://test-30d03.firebaseio.com/", No
 config = {
 	"apiKey": "AIzaSyCcyRivX98VxvhYFTY1AAR0vRPwOM4Tmho",
 	"authDomain": "social-media-app-b7343.firebaseapp.com",
-	"databaseURL": "https://social-media-app-b7343.firebaseio.com",
+	"databaseURL": "https://test-30d03.firebaseio.com",
 	"projectId": "social-media-app-b7343",
-	"storageBucket": "social-media-app-b7343.appspot.com",
+	"storageBucket": "test-30d03.firebaseapp.com",
 	"messagingSenderId": "333439697229",
 	"appId": "1:333439697229:web:556da6346baaab8ca2b704",
 	"measurementId": "G-4XFJ4E6FWH"
@@ -411,8 +411,9 @@ def adding():
 			}
 			result = firebase.post("/posts", pst)
 			firebase.put("/posts/" + result["name"], "_id", result["name"])
-			if _file: _file = request.files["file"]
-			storage.child(f"/{result['name']}/" + _file.filename).put(_file)
+			if _file:
+				_file = request.files["file"]
+				storage.child(f"/{result['name']}/" + _file.filename).put(_file)
 			return redirect(f"/{result['name']}-post")
 		else:
 			flash("You need to fill all the fields!")
@@ -1096,8 +1097,9 @@ def adding_post_group(_id):
 			}
 			result = firebase.post("/posts", post)
 			firebase.put("/posts/" + result["name"], "_id", result["name"])
-			if _file: _file = request.files["file"]
-			storage.child(f"/{result['name']}/" + _file.filename).put(_file)
+			if _file:
+				_file = request.files["file"]
+				storage.child(f"/{result['name']}/" + _file.filename).put(_file)
 			group = get_group("_id", _id)
 			post = get_post("_id", result["name"])["_id"]
 			group_posts = group["posts"] + str(post) + " "

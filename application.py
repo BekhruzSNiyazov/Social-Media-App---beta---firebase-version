@@ -817,8 +817,8 @@ def post(_id):
 		if post["file"]:
 			ext = post["file"].split(".")[1]
 			imgs = ["jpg", "png", "raw", "bmp", "jfif", "gif"]
-			if ext in imgs: url = f"https://firebasestorage.googleapis.com/v0/b/test-30d03.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
-			else: download = f"https://firebasestorage.googleapis.com/v0/b/test-30d03.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
+			if ext in imgs: url = f"https://firebasestorage.googleapis.com/v0/b/social-media-app-b7343.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
+			else: download = f"https://firebasestorage.googleapis.com/v0/b/social-media-app-b7343.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
 		liked_items = user["liked_items"].split()
 		saved_items = user["saved_items"].split()
 		likeable = True

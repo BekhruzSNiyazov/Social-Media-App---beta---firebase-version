@@ -7,7 +7,7 @@ import pyrebase
 
 app = Flask(__name__)
 app.secret_key = b"_5#y2L'F4Q8z\n\xec]/"
-firebase = firebase.FirebaseApplication("https://test-30d03.firebaseio.com/", None)
+firebase = firebase.FirebaseApplication("https://social-media-app-b7343.firebaseio.com/", None)
 
 config = {
 	"apiKey": "AIzaSyCcyRivX98VxvhYFTY1AAR0vRPwOM4Tmho",

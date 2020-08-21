@@ -1,13 +1,1 @@
-{% extends "base.html" %}
-{% block title %}Change the administrator of {{group["name"]}} group{% endblock %}
-{% block body %}
-	<h2 style="margin-left: 5%;">Change the administrator</h2>
-	<span style="margin-left: 5%;">Change the administrator of <a href="/{{group['_id']}}-group" class="link">{{group["name"]}}</a> group</span><br><br>
-	{% if members %}
-		{% for member in members %}
-			<span style="margin-left: 5%;">@{{member["username"]}} <a href="/changing-admin-{{member['_id']}}:{{group['_id']}}" class="a">Change to this user</a></span><br>
-		{% endfor %}
-	{% else %}
-		<center><h3 style="color: #d3d3d3; margin-top: 5%;">There are no members in this group so you cannot change the administrator.</h3></center>
-	{% endif %}
-{% endblock %}
+{% extends "base.html" %}{% block title %}Change the administrator of {{group["name"]}} group{% endblock %}{% block body %}<h2 style="margin-left: 5%;">Change the administrator</h2><span style="margin-left: 5%;">Change the administrator of <a href="/{{group['_id']}}-group" class="link">{{group["name"]}}</a> group</span><br><br>{% if members %}{% for member in members %}<span style="margin-left: 5%;">@{{member["username"]}} <a href="/changing-admin-{{member['_id']}}:{{group['_id']}}" class="a">Change to this user</a></span><br>{% endfor %}{% else %}<center><h3 style="color: #d3d3d3; margin-top: 5%;">There are no members in this group so you cannot change the administrator.</h3></center>{% endif %}{% endblock %}

@@ -1,15 +1,1 @@
-{% extends "base.html" %}
-{% block title %}Change Profile Data{% endblock %}
-{% block body %}
-	<h2 style="margin-left: 5%;">Change profile data</h2>
-	<form action="/changing" method="POST">
-		<p style="margin-left: 5%;">
-			Your username: <input type="text" name="username" value="{{username}}" class="change" style="width: 18.25%;"><br>
-			Your email: <span style="margin-left: 2.5%;">{{email}}</span><br>
-			Your first name: <input type="text" name="first" value="{{first}}" class="change" style="width: 18.1%;"><br>
-			Your last name: <input type="text" name="last" value="{{last}}" class="change" style="width: 18.25%;"><br>
-			<button class="safe">Save changes</button>
-            <button class="danger"><a href="/settings" class="none_red">Cancel</a></button>
-		</p>
-	</form>
-{% endblock %}
+{% extends "base.html" %}{% block title %}Change Profile Data{% endblock %}{% block body %}<h2 style="margin-left: 5%;">Change profile data</h2><form action="/changing" method="POST"><p style="margin-left: 5%;">Your username: <input type="text" name="username" value="{{username}}" class="change" style="width: 18.25%;"><br>Your email: <span style="margin-left: 2.5%;">{{email}}</span><br>Your first name: <input type="text" name="first" value="{{first}}" class="change" style="width: 18.1%;"><br>Your last name: <input type="text" name="last" value="{{last}}" class="change" style="width: 18.25%;"><br><button class="safe">Save changes</button><button class="danger"><a href="/settings" class="none_red">Cancel</a></button></p></form>{% endblock %}

@@ -304,7 +304,6 @@ def signingup():
 body = f"""{code} We need to verify your email. Please, copy and paste this code in your browser."""
 message = f"""\
 Subject: Email verification (Social Media App)
-
 {body}
 """
 
@@ -395,7 +394,7 @@ def adding():
 				post_added_notifications = follower["post_added_notifications"] + str(len(all_posts())+1) + " "
 				firebase.put("/users/" + str(follower["_id"]), "post_added_notifications", post_added_notifications)
 			_file = ""
-			if "file" in request.files: _file = request.files["file"].filename
+			if "file" in request.files: _file = request.files["file"].filename.replace(" ", "_")
 			pst = {
 				"_id": "",
 				"username": session["username"],
@@ -813,11 +812,17 @@ def post(_id):
 			if group["status"] == "private":
 				if str(user["_id"]) not in group["members"].split(): return redirect(url_for("index"))
 		url = ""
+		img = False
 		download = ""
 		if post["file"]:
-			ext = post["file"].split(".")[1]
+			ext = post["file"].split(".")[-1]
 			imgs = ["jpg", "png", "raw", "bmp", "jfif", "gif"]
-			if ext in imgs: url = f"https://firebasestorage.googleapis.com/v0/b/social-media-app-b7343.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
+			vids = "mp4"
+			for i in range(100): print(post["file"])
+			if ext in imgs:
+				url = f"https://firebasestorage.googleapis.com/v0/b/social-media-app-b7343.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
+				img = True
+			elif ext == vids: url = f"https://firebasestorage.googleapis.com/v0/b/social-media-app-b7343.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
 			else: download = f"https://firebasestorage.googleapis.com/v0/b/social-media-app-b7343.appspot.com/o/{post['_id']}%2F{post['file']}?alt=media&"
 		liked_items = user["liked_items"].split()
 		saved_items = user["saved_items"].split()
@@ -835,7 +840,7 @@ def post(_id):
 			for comment in comments:
 				if comment["username"] == session["username"]: delete.append(comment)
 		return render_template("post.html", post=post, likeable=likeable, saveable=saveable,\
-			comments=comments, delete=delete, user=user, _id=post["user_id"], group=group, url=url, download=download)
+			comments=comments, delete=delete, user=user, _id=post["user_id"], group=group, url=url, download=download, img=img)
 	flash(login_message)
 	return redirect(url_for("login"))
 
@@ -999,8 +1004,8 @@ def invite(_id):
 @app.route("/inviting-<info>")
 def inviting(info):
 	if "username" in session:
-		friend_id = int(info.split(":")[0])
-		_id = int(info.split(":")[1])
+		friend_id = info.split(":")[0]
+		_id = info.split(":")[1]
 		group = get_group("_id", _id)
 		members = group["members"] + f"{friend_id} "
 		firebase.put("/groups/" + str(group["_id"]), "members", members)
@@ -1016,22 +1021,18 @@ def invite_users(_id):
 	if "username" in session:
 		group = get_group("_id", _id)
 		user = get_user("username", session["username"])
-		if user["_id"] == group["admin"]:
-			users = []
-			for user in all_users():
-				if str(group["_id"]) not in user["groups"].split(): users.append(user)
-			return render_template("invite_users.html", group=group, users=users, user=user)
-		else:
-			flash("You cannot invite users to this group unless they are your friends.")
-			return redirect(f"/{_id}-group")
+		users = []
+		for _id in all_users():
+			if str(group["_id"]) not in all_users()[_id]["groups"].split(): users.append(all_users()[_id])
+		return render_template("invite_users.html", group=group, users=users, user=user)
 	flash(login_message)
 	return redirect(url_for("login"))
 
 @app.route("/remove-from-group-<info>")
 def remove_from_group(info):
 	if "username" in session:
-		user_id = int(info.split(":")[0])
-		_id = int(info.split(":")[1])
+		user_id = info.split(":")[0]
+		_id = info.split(":")[1]
 		user = get_user("_id", user_id)
 		group = get_group("_id", _id)
 		groups = user["groups"].replace(f"{str(_id)} ", "")
@@ -1188,10 +1189,10 @@ def delete_group(_id):
 	return redirect(url_for("login"))
 
 @app.route("/searching-<info>")
-def searching_friends(info):
+def searching_users(info):
 	if "username" in session:
 		usrs = info.split(":")[0]
-		_id = int(info.split(":")[1])
+		_id = info.split(":")[1]
 		user = get_user("username", session["username"])
 		group = get_group("_id", _id)
 		query = request.args["q"].lower()
@@ -1201,7 +1202,9 @@ def searching_friends(info):
 				friend = get_user("_id", _id)
 				l.append(friend)
 		else:
-			tmp = all_users()
+			tmp = []
+			au = all_users()
+			for d in au: tmp.append(au[d])
 			tmp.remove(user)
 			l = tmp
 		users = []

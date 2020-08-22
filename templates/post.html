@@ -13,7 +13,13 @@
 	<div style="margin-left: 15%; margin-right: 15%; margin-top: 2%;">
 		<h1>{{post['title']}}</h1>
 		{% if url %}
-			<img src="{{url}}" alt="{{post['file']}}" height="50%" width="50%">
+			{% if img %}
+				<img src="{{url}}" alt="{{post['file']}}" height="50%" width="50%">
+			{% else %}
+				<video controls="controls" src="{{url}}" height="50%" width="50%">
+					Your browser does not support the HTML5 Video element.
+				</video>
+			{% endif %}
 		{% endif %}
 		<p>{% for c in post['body'] %}{% if c == '\n'%}<br>{% endif %}{{c}}{% endfor %}</p>
 		{% if download %}

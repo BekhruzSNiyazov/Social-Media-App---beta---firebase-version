@@ -7,7 +7,24 @@
 			margin-right: 5%;
 		}
 	</style>
-	<span id="notifications"></span>	
+	<span id="notifications"></span>
+	<!--
+    PeoplePerHour Profile Widget
+    The div#pph-hire me is the element
+    where the iframe will be inserted.
+    You may move this element wherever
+    you need to display the widget
+-->
+<div id="pph-hireme"></div>
+<script type="text/javascript">
+(function(d, s) {
+    var useSSL = 'https:' == document.location.protocol;
+    var js, where = d.getElementsByTagName(s)[0],
+    js = d.createElement(s);
+    js.src = (useSSL ? 'https:' : 'http:') +  '//www.peopleperhour.com/hire/2310484465/4804834.js?width=728&height=123&orientation=horizontal&theme=light&hourlies=676427%2C676280&rnd='+parseInt(Math.random()*10000, 10);
+    try { where.parentNode.insertBefore(js, where); } catch (e) { if (typeof console !== 'undefined' && console.log && e.stack) { console.log(e.stack); } }
+}(document, 'script'));
+</script>
 	{% if groups %}
 		<h4 style="margin-left: 5%;">Groups: </h4>
 		{% for group in groups %}
